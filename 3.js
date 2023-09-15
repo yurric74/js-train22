@@ -5,44 +5,78 @@
  * Клієнт ідентифікується своєю електронною адресою, яку використовується для відправки повідомлень.
  */
 class Customer {
+  #email;
+  constructor(email) {
+    this.#email=email;
+  }
+  message (message) {
+    console.log(`${this.#email} ${message}`);}
+  }
   /**
    * Конструктор для класу Customer. Приймає email - Електронна адреса клієнта.
    */
   /**
    * Метод відправки повідомлення клієнту по електронній пошті.Приймає message - повідомлення,та виводить в консоль ${this.email} ${message}.
    */
-}
+
 
 /**
  * Клас Product представляє продукт, який можна створювати.
  */
 class Product {
+  #name;
+  constructor(name) {
+    this.#name = name;
+  }
+  get name() {
+    return this.#name;}}
   /**
    * Конструктор для класу Product.Приймає name - Назва продукту.
    */
-}
+
 
 /**
  * Клас Store представляє магазин, який може мати підписників і створювати нові продукти.
  * Магазин має назву і список підписників, які отримують повідомлення про нові продукти.
  */
 class Store {
+  #name;
+  #customers = [];
+  constructor(name) {
+    this.#name=name;
+    
+  }
   /**
    * Конструктор для класу Store.Приймає name - Назва магазину, та створює пустий масив customers
    */
+ 
+  subscribe(customer) {
+    this.#customers.push(customer);
+  }
   /**
    * Метод subscribe для підписки клієнта на магазин. Приймає customer - Клієнт, який підписується.
    * Після виклику цього методу, клієнт буде отримувати повідомлення про нові продукти, через push додаємо клієнта до масиву.
    */
+  unsubscribe(customer) {
+    this.#customers = this.#customers.filter((c) => c !== customer);
+  }
   /**
    * Метод unsubscribe для відписки клієнта від магазину.Приймає customer - Клієнт, який відписується.
    * Після виклику цього методу, клієнт більше не буде отримувати повідомлення про нові продукти, через filter прибираємо клієнта з масиву.
    */
+  createProduct(name) {
+    const product = new Product(name);
+    this.sendNotify(product);
+  }
   /**
    * Метод createProduct для створення нового продукту в магазині.Приймає name - Назва нового продукту.
    * Після виклику цього методу, новий продукт буде створено, а всі підписники отримають про це повідомлення через sendNotify.
    */
-  /**
+  sendNotify(product) {
+    const message = `Новий продукт "${product.name}" в магазині ${this.#name}}!`;
+    this.#customers.forEach((customer) => 
+      customer.message(message));}
+  /*
    * Метод для відправки повідомлень всім підписникам про новий продукт.Приймає product - Продукт, про який відправляється повідомлення.
    * Новий продукт "${product.name}" в магазині ${this.name}! за допомогою sendEmail.
    */
@@ -53,18 +87,17 @@ class Store {
 console.log("Завдання 3 ====================================");
 // Після виконання розкоментуйте код нижче
 
-// const store = new Store("IT Supermarket");
+ const store = new Store("IT Supermarket");
 
-// const customer1 = new Customer("john@example.com");
-// const customer2 = new Customer("jane@example.com");
-// const customer3 = new Customer("alice@example.com");
+ const customer1 = new Customer("john@example.com");
+ const customer2 = new Customer("jane@example.com");
+ const customer3 = new Customer("alice@example.com");
 
-// store.subscribe(customer1);
-// store.subscribe(customer2);
-// store.subscribe(customer3);
+ store.subscribe(customer1);
+ store.subscribe(customer2);
+ store.subscribe(customer3)
+ store.createProduct("Новий ноутбук");
 
-// store.createProduct("Новий ноутбук");
+ store.unsubscribe(customer1);
 
-// store.unsubscribe(customer1);
-
-// store.createProduct("Бездротові навушники");
+ store.createProduct("Бездротові навушники");
